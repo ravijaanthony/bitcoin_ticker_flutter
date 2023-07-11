@@ -99,7 +99,6 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            // print();
             child: Platform.isAndroid ? androidDropdown() : iOSPicker(), // Ternary operator to find the running OS
           ),
         ],
