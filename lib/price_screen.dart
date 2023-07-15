@@ -13,6 +13,7 @@ ExchangeRates exchangeRates = ExchangeRates();
 // var assetIDBase = exchangeRates.asset_id_base;
 
 String selectedCurrencyType = "USD";
+// var generate;
 //
 
 class PriceScreen extends StatefulWidget {
@@ -23,6 +24,7 @@ class PriceScreen extends StatefulWidget {
 class _PriceScreenState extends State<PriceScreen> {
   DropdownButton androidDropdown() {
     List<DropdownMenuItem<String>> dropDownItems = [];
+    // List
     print(selectedCurrencyType);
 
     // fetchBitcoinPrice().then((data) {
@@ -46,6 +48,7 @@ class _PriceScreenState extends State<PriceScreen> {
         setState(() {
           selectedCurrencyType = value!;
           exchangeRates.coinRates();
+          generatingWidget();
           // fetchBitcoinPrice();
           // coinbaseCurrencyValues;
         });
@@ -79,39 +82,74 @@ class _PriceScreenState extends State<PriceScreen> {
     return iOSPicker();
   }
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   generate = generatingWidget();
+  // }
+
+  dynamic generatingWidget() {
+    List<Widget> generatingAWidget = List.generate(
+      cryptoList.length,
+      (index) {
+        String base = cryptoList[index];
+        String finalCurrencyValue = exchangeRates.formattedNumberCurrency;
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(18.0, 10.0, 18.0, 0),
+          child: Card(
+            color: Colors.lightBlueAccent,
+            elevation: 5,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Text(
+                '1 $base = $finalCurrencyValue $asset_id_quote',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            //
+            // textAlign: TextAlign.center,
+          ),
+        );
+      },
+    );
+    return generatingAWidget;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String finalCurrencyValue = exchangeRates.formattedNumberCurrency;
-    androidDropdown();
+    generatingWidget();
+    // generatingWidget().generatingAWidget;
+    // String finalCurrencyValue = exchangeRates.formattedNumberCurrency;
+    // androidDropdown();
 
     return Scaffold(
         appBar: AppBar(
           title: Text('🤑 Coin Ticker'),
         ),
-        body: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-          Padding(
-              padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-              child: Card(
-                  color: Colors.lightBlueAccent,
-                  elevation: 5.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                      child: Text('1 $asset_id_base = $finalCurrencyValue $asset_id_quote',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                          ))))),
-          Container(
-            height: 150.0,
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-            child: Platform.isAndroid ? androidDropdown() : iOSPicker(), // Ternary operator to find the running OS
-          )
-        ]));
+        body: ListView.builder(
+          itemCount: 3,
+          itemBuilder: (BuildContext context, int index) {
+            Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+              generatingWidget(),
+              // ...generatingAWidget,
+              // generatingWidget(),
+              Container(
+                height: 150.0,
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: 30.0),
+                color: Colors.lightBlue,
+                child: Platform.isAndroid ? androidDropdown() : iOSPicker(), // Ternary operator to find the running OS
+              ),
+            ]);
+            return generatingWidget();
+          },
+          // child: ,
+        ));
   }
 }
